@@ -1,0 +1,24 @@
+{
+  "name": "hyperapp-transitions",
+  "version": "0.0.1",
+  "description": "Transitions for HyperApp/PicoDOM",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "browserify src/index.js --standalone transitions | uglifyjs  --mangle --compress > dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaceno/hyperapp-transitions.git"
+  },
+  "author": "Zacharias Enochsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zaceno/hyperapp-transitions/issues"
+  },
+  "homepage": "https://github.com/zaceno/hyperapp-transitions#readme",
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "uglify-es": "^3.0.23"
+  },
+  "dependencies": {}
+}
