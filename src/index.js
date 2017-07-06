@@ -60,9 +60,35 @@ function both (name, time, delay) {
     return v => a(b(v))
 }
 
+function moves (fn, time) {
+    if (!fn)  return moves(_ => ({easing: '', time: 300}))
+    if (time) return moves(_ => ({easing: fn, time}))
+    if (typeof fn !== 'function') return moves(_ => fn)
+    return handler('onupdate', function (el) {
+        const {easing, time} = fn()
+        Array.from(el.childNodes).forEach(child => {
+            const {left: aX, top: aY} = child.getBoundingClientRect()
+            child.style.opacity = `0`
+            setTimeout(_ => {
+                const {left: bX, top: bY} = child.getBoundingClientRect()
+                child.style.transform = `translate(${aX-bX}px, ${aY-bY}px)`
+                child.style.opacity = ''
+                setTimeout(_ => {
+                    child.style.transition = `all ${easing} ${time}ms`
+                    child.style.transform = ''
+                    setTimeout(_ => {
+                        child.style.transition = ''
+                    }, time)
+                }, 0)
+            }, 0)
+        })
+    })
+}
+
 module.exports = {
     enter,
     leave,
     both,
     change,
+    moves,
 }
