@@ -71,14 +71,14 @@ function moves (fn, time) {
             requestAnimationFrame(_ => {
                 const {left: bX, top: bY} = child.getBoundingClientRect()
                 child.style.transform = `translate(${aX-bX}px, ${aY-bY}px)`
-                setTimeout(_ => {
+                requestAnimationFrame(_ => {
                     child.style.transition = `all ${easing} ${time}ms`
                     child.style.transform = ''
                     setTimeout(_ => {
                         child.style.transition = ''
                     }, time)
-                }, 0)
-            }, 0)
+                })
+            })
         })
     })
 }
