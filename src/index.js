@@ -68,11 +68,9 @@ function moves (fn, time) {
         const {easing, time} = fn()
         Array.from(el.childNodes).forEach(child => {
             const {left: aX, top: aY} = child.getBoundingClientRect()
-            child.style.opacity = `0`
-            setTimeout(_ => {
+            requestAnimationFrame(_ => {
                 const {left: bX, top: bY} = child.getBoundingClientRect()
                 child.style.transform = `translate(${aX-bX}px, ${aY-bY}px)`
-                child.style.opacity = ''
                 setTimeout(_ => {
                     child.style.transition = `all ${easing} ${time}ms`
                     child.style.transform = ''
