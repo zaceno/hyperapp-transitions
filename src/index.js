@@ -1,4 +1,5 @@
 
+
 const DEFAULTS = {
   name: '',
   time: 0,
@@ -12,10 +13,17 @@ function setTransition (props, el) {
   el.style.transition = `all ${props.easing} ${props.time}ms`
 }
 
+function props2Fn(props) {
+  return _ => {
+    var props2 = (typeof props === 'function') ? props() : props
+    return Object.assign({}, DEFAULTS, props2)
+  }
+}
+
 function txmethod (name, f) {
   return function (props) {
-    props = Object.assign({}, DEFAULTS, props)
-    const handler = (...args) => f(props, ...args)
+    const propsFn = props2Fn(props)
+    const handler = (...args) => f(propsFn(), ...args)
     return function (vnode) {
       const origHandler = vnode.data[name] || (_ => {})
       vnode.data[name] = (...args) => {
@@ -110,6 +118,8 @@ function group(f) {
     return vnode
   }
 }
+
+
 
 module.exports = {
     enter,
