@@ -27,17 +27,6 @@ function txmethod (name, f) {
   }
 }
 
-function handler(prop, f) {
-  return function (vnode) {
-    const origHandler = vnode.data[prop] || (_ => {})
-    vnode.data[prop] = (...args) => {
-      origHandler(...args)
-      f(...args)
-    }
-    return vnode
-  }
-} 
-
 function trackMoves (el) {
     const prevX = el.getAttribute('data-t-x')
     const prevY = el.getAttribute('data-t-y')
