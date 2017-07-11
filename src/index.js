@@ -65,9 +65,6 @@ const enter = txmethod('oncreate', (props, el) => {
   setTimeout(_ => {
     setTransition(props, el)
     el.classList.remove(clsEnter)
-    // setTimeout(_ => {
-    //   el.style.transition = ''
-    // }, props.time)
   }, props.delay)
 })
 
