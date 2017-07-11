@@ -124,6 +124,8 @@ notifications.map(txt => slideIn(<div class="notification">{txt}</div>))
 ```
 (Try a live example [here](https://codepen.io/zaceno/pen/QgZQGW))
 
+*Note: All nodes decorated with `enter` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
+
 ## `combine`
 
 `combine(decorator, decorator, ...) -> decorator`
@@ -216,6 +218,8 @@ const slideInPopOut = combine(
 
 A live example of combined enter- and leave-transitions [here](https://codepen.io/zaceno/pen/rwqZab)
 
+*Note: All nodes decorated with `leave` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
+
 ## Deferred Options
 
 Often, for `leave` and `enter` transitions in particular, you may not know how you would like to transition ("enter from the left? or the right?) until the user has interacted somehow. 
@@ -245,6 +249,8 @@ Options:
 This transition creator is most naturally used together with `group`. When layout changes cause the element to be repositioned, move-decorators will cause the element to slide smoothly to its new position, rather than just "jump" into place.
 
 For examples, see [`group`](#group)
+
+*Note: All nodes decorated with `move` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
 
 ## `group`
 
