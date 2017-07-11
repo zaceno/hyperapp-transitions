@@ -72,6 +72,7 @@ const change = txmethod('oncreate', (props, el) => setTransition(props, el))
 
 const _moveOnUpdate = txmethod('onupdate', (props, el) => {
   const [dx, dy] = trackMoves(el)
+  el.style.transition = ''
   el.style.transform = `translate(${dx}px, ${dy}px)`
   setTimeout(_ => {
     setTransition(props, el)
