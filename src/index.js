@@ -1,5 +1,3 @@
-
-
 const DEFAULTS = {
   name: '',
   time: 0,
@@ -36,8 +34,8 @@ function txmethod (name, f) {
 }
 
 function trackMoves (el) {
-    const prevX = el.getAttribute('data-t-x')
-    const prevY = el.getAttribute('data-t-y')
+    const prevX = +el.getAttribute('data-t-x')
+    const prevY = +el.getAttribute('data-t-y')
     const {left: newX, top: newY} = el.getBoundingClientRect()
     el.setAttribute('data-t-x', newX)
     el.setAttribute('data-t-y', newY)
@@ -46,18 +44,31 @@ function trackMoves (el) {
 }
 
 const _leaveOnRemove = txmethod('onremove', (props, el, remove) => {
-    const [dx, dy] = trackMoves(el)
-    el.style.transition = ''
-    el.style.position = 'relative'
-    el.style.top = dy + 'px'
-    el.style.left = dx + 'px'
-    setTimeout(_ => {
-      el.classList.add(`${props.name}-leave`)
-      setTransition(props, el)
-      setTimeout(_ => {
-        if (props.last) remove()
-      }, props.time)
-    }, props.delay)
+  const cls = `${props.name}-leave`
+  //first we need to capture any transforms the
+  //leave class will apply
+  el.style.transition = ''
+  el.style.transform = ''
+  el.classList.add(cls)
+  const willTransform = getComputedStyle(el).getPropertyValue('transform')
+  const [sx, wx, wy, sy, tx, ty] = (willTransform === 'none')
+    ? [1, 0, 0, 1, 0, 0]
+    : willTransform.match(/^matrix\(([^\)]*)\)$/)[1].split(', ').map(s => +s);
+  el.classList.remove(cls)
+
+  //and set the plain translation:
+  const [dx, dy] = trackMoves(el)
+  el.style.transform = `translate(${dx}px, ${dy}px)`
+  
+  //after the specified delay, apply the transition
+  setTimeout(_ => {
+    el.classList.add(cls)
+    //override the transition props
+    el.style.transform = `matrix(${sx}, ${wx}, ${wy}, ${sy}, ${tx + dx}, ${ty + dy})`
+    setTransition(props, el)
+    //after the delay, if last, remove:
+    if (props.last) setTimeout(remove, props.time)
+  }, props.delay)
 })
 
 const _leaveOnCreate = txmethod('oncreate', (props, el) => setTimeout(_ => trackMoves(el), props.ready))
@@ -119,13 +130,11 @@ function group(f) {
   }
 }
 
-
-
 module.exports = {
+    change,
     enter,
     leave,
-    change,
     move,
-    combine,
-    group
+    group,
+    combine
 }
