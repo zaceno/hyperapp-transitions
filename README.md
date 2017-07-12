@@ -124,11 +124,8 @@ notifications.map(txt => slideIn(<div class="notification">{txt}</div>))
 ```
 (Try a live example [here](https://codepen.io/zaceno/pen/QgZQGW))
 
-<<<<<<< Updated upstream
 *Note: All nodes decorated with `enter` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
 
-=======
->>>>>>> Stashed changes
 ## `combine`
 
 `combine(decorator, decorator, ...) -> decorator`
@@ -221,11 +218,8 @@ const slideInPopOut = combine(
 
 A live example of combined enter- and leave-transitions [here](https://codepen.io/zaceno/pen/rwqZab)
 
-<<<<<<< Updated upstream
 *Note: All nodes decorated with `leave` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
 
-=======
->>>>>>> Stashed changes
 ## Deferred Options
 
 Often, for `leave` and `enter` transitions in particular, you may not know how you would like to transition ("enter from the left? or the right?) until the user has interacted somehow. 
@@ -256,11 +250,8 @@ This transition creator is most naturally used together with `group`. When layou
 
 For examples, see [`group`](#group)
 
-<<<<<<< Updated upstream
 *Note: All nodes decorated with `move` transitions need to be [keyed](https://github.com/hyperapp/hyperapp/blob/master/docs/keys.md)*
 
-=======
->>>>>>> Stashed changes
 ## `group`
 
 `group(decorator) -> decorator`
@@ -306,8 +297,4 @@ For a practical, live example see this implementation of a [15 puzzle](https://c
 
 By combining `move`, `leave` and `enter` decorators in a `group` you can make a quite elegant system for "toasts" (notifications that appear on screen in a row, and can be dismissed independently)
 
-<<<<<<< Updated upstream
 [Here](https://codepen.io/zaceno/pen/awRxaN) is a practical live example of just that. 
-=======
-[Here](https://codepen.io/zaceno/pen/awRxaN) is a practical live example of just that. 
->>>>>>> Stashed changes
