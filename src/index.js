@@ -29,12 +29,16 @@ function txmethod (name, f) {
         const propsFn = props2Fn(props)
         const handler = (...args) => f(propsFn(), ...args)
         return function (vnode) {
-        const origHandler = vnode.data[name] || (_ => {})
-        vnode.data[name] = (...args) => {
-            origHandler(...args)
-            handler(...args)
-        }
-        return vnode
+            const origHandler = vnode.data[name] || (_ => {})
+            vnode.data[name] = (...args) => {
+                origHandler(...args)
+                handler(...args)
+            }
+            //hack to make sure onupdate gets called every repaint
+            if (name === 'onupdate') {
+                vnode.data['dummy'] = Math.random()
+            }
+            return vnode
         }
     }
 }
