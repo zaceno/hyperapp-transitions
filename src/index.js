@@ -8,9 +8,8 @@ const DEFAULTS = {
 }
 
 function removeElement (el) {
-    if (el.parentNode) {
-        el.parentNode.removeChild(el)
-    }
+    if (!el.parentNode) return
+    el.parentNode.removeChild(el)
 }
 
 function setTransition (props, el) {
@@ -51,6 +50,7 @@ function trackMoves (el) {
 
 const _leaveOnRemove = txmethod('onremove', (props, el) => {
     const cls = `${props.name}-leave`
+
     //first we need to capture any transforms the
     //leave class will apply
     el.style.transition = ''
@@ -104,8 +104,8 @@ const _moveOnUpdate = txmethod('onupdate', (props, el) => {
         el.style.transition = `all ${props.easing} ${props.time}ms`
         el.style.transform = 'translate(0,0)'
         setTimeout(_ => {
-        el.style.transform = ''
-        el.style.transition = ''
+            el.style.transform = ''
+            el.style.transition = ''
         }, props.time)
     })        
 })
