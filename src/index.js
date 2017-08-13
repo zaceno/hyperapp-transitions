@@ -53,7 +53,7 @@ const _leaveOnRemove = txmethod('onremove', (props, el) => {
     const cls = `${props.name}-leave`
     //first we need to capture any transforms the
     //leave class will apply
-    el.style.transition = ''
+    el.style.transition = 'all 99s'
     el.style.transform = ''
     el.classList.add(cls)
     const willTransform = getComputedStyle(el).getPropertyValue('transform')
