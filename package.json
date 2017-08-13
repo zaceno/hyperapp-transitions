@@ -1,6 +1,6 @@
 {
   "name": "hyperapp-transitions",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Transitions for HyperApp/PicoDOM",
   "main": "dist/index.js",
   "scripts": {
