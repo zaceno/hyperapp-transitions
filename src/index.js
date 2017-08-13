@@ -34,10 +34,6 @@ function txmethod (name, f) {
                 origHandler(...args)
                 handler(...args)
             }
-            //hack to make sure onupdate gets called every repaint
-            if (name === 'onupdate') {
-                vnode.data['dummy'] = Math.random()
-            }
             return vnode
         }
     }
@@ -53,7 +49,7 @@ function trackMoves (el) {
     return [prevX - newX, prevY - newY]
 }
 
-const _leaveOnRemove = txmethod('onremove', (props, el, remove) => {
+const _leaveOnRemove = txmethod('onremove', (props, el) => {
     const cls = `${props.name}-leave`
     //first we need to capture any transforms the
     //leave class will apply
