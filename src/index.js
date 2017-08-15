@@ -28,6 +28,7 @@ function txmethod (name, f) {
         const propsFn = props2Fn(props)
         const handler = (...args) => f(propsFn(), ...args)
         return function (vnode) {
+            if (!vnode || !vnode.data) return
             const origHandler = vnode.data[name] || (_ => {})
             vnode.data[name] = (...args) => {
                 origHandler(...args)
@@ -57,7 +58,7 @@ const _leaveOnRemove = txmethod('onremove', (props, el) => {
     el.style.transform = ''
     el.classList.add(cls)
     const willTransform = getComputedStyle(el).getPropertyValue('transform')
-    const [sx, wx, wy, sy, tx, ty] = (willTransform === 'none')
+    const [sx, wx, wy, sy, tx, ty] = (willTransform === 'none')
         ? [1, 0, 0, 1, 0, 0]
         : willTransform.match(/^matrix\(([^\)]*)\)$/)[1].split(', ').map(s => +s);
     el.classList.remove(cls)
@@ -101,7 +102,6 @@ const _moveOnUpdate = txmethod('onupdate', (props, el) => {
     el.style.transform = `translate(${dx}px, ${dy}px)`
     setTimeout(_ => {
         setTransition(props, el)
-        el.style.transition = `all ${props.easing} ${props.time}ms`
         el.style.transform = 'translate(0,0)'
         setTimeout(_ => {
             el.style.transform = ''
