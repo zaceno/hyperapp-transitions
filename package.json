@@ -1,10 +1,10 @@
 {
   "name": "hyperapp-transitions",
   "version": "0.5.7",
-  "description": "Transitions for HyperApp/PicoDOM",
-  "main": "dist/index.js",
+  "description": "Transitions for Hyperapp/Picodom",
+  "main": "src/index.js",
   "scripts": {
-    "build": "browserify src/index.js --standalone transitions | uglifyjs  --mangle --compress > dist/index.js"
+    "build": "browserify src/index.js --standalone transitions | uglifyjs  --mangle --compress > dist/hyperapp-transitions.umd.js"
   },
   "repository": {
     "type": "git",

@@ -28,9 +28,9 @@ function txmethod (name, f) {
         const propsFn = props2Fn(props)
         const handler = (...args) => f(propsFn(), ...args)
         return function (vnode) {
-            if (!vnode || !vnode.data) return
-            const origHandler = vnode.data[name] || (_ => {})
-            vnode.data[name] = (...args) => {
+            if (!vnode || !vnode.props) return
+            const origHandler = vnode.props[name] || (_ => {})
+            vnode.props[name] = (...args) => {
                 origHandler(...args)
                 handler(...args)
             }

@@ -1,11 +1,11 @@
-# Transition Helpers for HyperApp / PicoDOM
+# Transition Helpers for Hyperapp / Picodom
 
 
 Transitions, or more specifically transition-*animations* are animations that smooth out the appearance of your app as elements are added, changed and removed. Well designed transitions provide important cues to the user, and are essential for a good experience.
 
 On the web, the favored approach is to use the CSS-transition property. Some javascript is often also needed, in order to apply the css properties with appropriate timing to achieve the desired effect.
 
-This library provides function to help you design your app with beautiful, meaningful transitions without cluttering your code. Specifically for apps based on [HyperApp](https://hyperapp.js.org) and [PicoDOM](https://github.com/picodom/picodom).
+This library provides function to help you design your app with beautiful, meaningful transitions without cluttering your code. Specifically for apps based on [Hyperapp](https://hyperapp.js.org) and [Picodom](https://github.com/picodom/picodom).
 
 If you want to just dive straight in, have a look at these couple of live-editable examples on codepen:
 
@@ -36,7 +36,7 @@ The imported object contains the helper methods described below.
 Include the following script tag in the `<head>...</head>` of your html page:
 
 ```html
-<script src="https://unpkg.com/hyperapp-transitions"></script>
+<script src="https://unpkg.com/hyperapp-transitions@latest/dist/hyperapp-transitions.umd.js"></script>
 ```
 
 This creates a `transitions` object in the global scope, through which you access the methods described below. 
