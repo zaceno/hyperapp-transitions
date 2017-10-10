@@ -26,13 +26,14 @@ function props2Fn(props) {
 function txmethod (name, f) {
     return function (props) {
         const propsFn = props2Fn(props)
-        const handler = (...args) => f(propsFn(), ...args)
+        const handler = el => f(propsFn(), el)
         return function (vnode) {
             if (!vnode || !vnode.props) return
             const origHandler = vnode.props[name] || (_ => {})
             vnode.props[name] = (...args) => {
                 origHandler(...args)
                 handler(...args)
+                return () => {} //hack to make onremove let me remove elements myself
             }
             return vnode
         }
