@@ -1,6 +1,6 @@
 {
   "name": "hyperapp-transitions",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "Transitions for Hyperapp/Picodom",
   "main": "src/index.js",
   "scripts": {
