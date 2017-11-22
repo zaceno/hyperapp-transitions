@@ -7,7 +7,34 @@ const DEFAULTS = {
     last: true,
 }
 
+addEventListener('scroll', _ => autoTracking.update())
+addEventListener('resize', _ => autoTracking.update())
+const autoTracking = {
+    elems: [],
+    track: el => autoTracking.elems.push(el),
+    untrack: el => {
+        const i = autoTracking.elems.indexOf(el)
+        if (i === -1) return
+        autoTracking.elems.splice(i, 1)
+    },
+    update: _ => autoTracking.elems.forEach(trackMoves)
+}
+
+
+function trackMoves (el) {
+    const prevX = +el.getAttribute('data-t-x')
+    const prevY = +el.getAttribute('data-t-y')
+    const {left: newX, top: newY} = el.getBoundingClientRect()
+    el.setAttribute('data-t-x', newX)
+    el.setAttribute('data-t-y', newY)
+    if (!prevX) return [null, null]
+    return [prevX - newX, prevY - newY]
+}
+
+
+
 function removeElement (el) {
+    autoTracking.untrack(el)
     if (!el.parentNode) return
     el.parentNode.removeChild(el)
 }
@@ -40,16 +67,6 @@ function txmethod (name, f) {
     }
 }
 
-function trackMoves (el) {
-    const prevX = +el.getAttribute('data-t-x')
-    const prevY = +el.getAttribute('data-t-y')
-    const {left: newX, top: newY} = el.getBoundingClientRect()
-    el.setAttribute('data-t-x', newX)
-    el.setAttribute('data-t-y', newY)
-    if (!prevX) return [null, null]
-    return [prevX - newX, prevY - newY]
-}
-
 const _leaveOnRemove = txmethod('onremove', (props, el) => {
     const cls = `${props.name}-leave`
 
@@ -79,7 +96,10 @@ const _leaveOnRemove = txmethod('onremove', (props, el) => {
     }, props.delay)
 })
 
-const _leaveOnCreate = txmethod('oncreate', (props, el) => setTimeout(_ => trackMoves(el), props.ready))
+const _leaveOnCreate = txmethod('oncreate', (props, el) => {
+  autoTracking.track(el)
+  setTimeout(_ => trackMoves(el), props.ready)
+})
 
 const leave = props => combine(
     _leaveOnCreate(props),
@@ -111,7 +131,10 @@ const _moveOnUpdate = txmethod('onupdate', (props, el) => {
     })        
 })
 
-const _moveOnCreate = txmethod('oncreate', (props, el) => setTimeout(_ => trackMoves(el), props.ready))
+const _moveOnCreate = txmethod('oncreate', (props, el) => {
+  autoTracking.track(el)
+  setTimeout(_ => trackMoves(el), props.ready)
+})
 
 const move = props => combine(
     _moveOnCreate(props),
@@ -136,6 +159,7 @@ function group(f) {
         return vnode
     }
 }
+
 
 
 module.exports = {
