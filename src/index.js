@@ -1,172 +1,138 @@
-const DEFAULTS = {
-    name: '',
-    time: 0,
-    delay: 0,
-    ready: 0,
-    easing: '',
-    last: true,
-}
-
-addEventListener('scroll', _ => autoTracking.update())
-addEventListener('resize', _ => autoTracking.update())
-const autoTracking = {
-    elems: [],
-    track: el => autoTracking.elems.push(el),
-    untrack: el => {
-        const i = autoTracking.elems.indexOf(el)
-        if (i === -1) return
-        autoTracking.elems.splice(i, 1)
-    },
-    update: _ => autoTracking.elems.forEach(trackMoves)
-}
 
 
-function trackMoves (el) {
-    const prevX = +el.getAttribute('data-t-x')
-    const prevY = +el.getAttribute('data-t-y')
-    const {left: newX, top: newY} = el.getBoundingClientRect()
-    el.setAttribute('data-t-x', newX)
-    el.setAttribute('data-t-y', newY)
-    if (!prevX) return [null, null]
-    return [prevX - newX, prevY - newY]
-}
+addEventListener('resize', _ => updateAllTracked())
+addEventListener('scroll', _ => updateAllTracked())
 
-
+const trackingRegistry = []
 
 function removeElement (el) {
-    autoTracking.untrack(el)
-    if (!el.parentNode) return
     el.parentNode.removeChild(el)
 }
 
-function setTransition (props, el) {
-    el.style.transition = `all ${props.easing} ${props.time}ms`
+function setStyle (el, props) {
+    Object.keys(props).forEach(name => {
+        el.style[name] = props[name]
+    })
 }
 
-function props2Fn(props) {
-    return _ => {
-        var props2 = (typeof props === 'function') ? props() : props
-        return Object.assign({}, DEFAULTS, props2)
+function registerTracking (el) {
+    if (trackingRegistry.indexOf(el) > -1 ) return
+    updateTracking(el)
+    trackingRegistry.push(el)
+}
+
+function unregisterTracking(el) {
+    const i = trackingRegistry.indexOf(el)
+    if (i === -1) return
+    trackingRegistry.splice(i, 1)
+}
+
+function updateAllTracked () {
+    trackingRegistry.forEach(updateTracking)  
+} 
+
+function invertLastMove (el) {
+    const ox = el._x
+    const oy = el._y
+    if (!ox) return `translate(0, 0)`
+    const {x, y} = updateTracking(el)   
+    return `translate(${Math.floor(ox-x)}px, ${Math.floor(oy-y)}px)`
+}
+
+function updateTracking (el) {
+    const {top: y, left: x} = el.getBoundingClientRect()
+    el._x = x
+    el._y = y
+    return {x, y}
+}
+
+function runTransition (el, props, before, after, ondone) {
+    const easing = props.easing || 'linear'
+    const time = props.time || 300
+        setStyle(el, before)
+        //two nested rAF required for it to work in Chrome
+        requestAnimationFrame(_ => {
+            requestAnimationFrame(_ => {
+                setStyle(el, after)
+                el.style.transition = `all ${easing} ${time}ms`
+                setTimeout(_ => {
+                    el.style.transition = null
+                    ondone && ondone()
+                }, time)
+            })
+        })
+}
+
+function runEnter (el, props, css) {
+    if (typeof css === 'function') css = css()
+    runTransition(
+        el, props,
+        css,
+        Object.keys(css).reduce((o, n) => {
+            o[n] = null
+            return o
+        }, {}),
+        _ => updateTracking(el)
+    )
+}
+
+function runMove (el, props) {
+    runTransition(
+        el, props,
+        {transform: invertLastMove(el)},
+        {transform: null}
+    )
+}
+
+function runExit (el, props, css) {
+    if (typeof css === 'function') css = css()
+    unregisterTracking(el)
+    const translation = invertLastMove(el)
+    css.transform = `${translation}${css.transform && (' ' + css.transform)}`
+    runTransition(
+        el, props,
+        {transform: translation},
+        css,
+        _ => removeElement(el)
+    )
+}
+
+function composeHandlers (f1, f2) {
+    return function (el) {
+        f1 && f1(el)
+        f2 && f2(el)
     }
 }
 
-function txmethod (name, f) {
-    return function (props) {
-        const propsFn = props2Fn(props)
-        const handler = el => f(propsFn(), el)
-        return function (vnode) {
-            if (!vnode || !vnode.props) return
-            const origHandler = vnode.props[name] || (_ => {})
-            vnode.props[name] = (...args) => {
-                origHandler(...args)
-                handler(...args)
-                return () => {} //hack to make onremove let me remove elements myself
-            }
-            return vnode
-        }
+function transitionComponent (handlersFn) {
+    return function (props, children) {
+        const handlers = handlersFn(props || {})
+        return children.filter(child => !!child.props).map(child => {
+            ['oncreate', 'onupdate', 'onremove'].forEach(n => {
+                child.props[n] = composeHandlers(child.props[n], handlers[n])
+            })  
+            return child
+        })
     }
 }
 
-const _leaveOnRemove = txmethod('onremove', (props, el) => {
-    const cls = `${props.name}-leave`
+const _track = transitionComponent(props => ({
+    oncreate: el => registerTracking(el)
+}))
 
-    //first we need to capture any transforms the
-    //leave class will apply
-    el.style.transition = ''
-    el.style.transform = ''
-    el.classList.add(cls)
-    const willTransform = getComputedStyle(el).getPropertyValue('transform')
-    const [sx, wx, wy, sy, tx, ty] = (willTransform === 'none')
-        ? [1, 0, 0, 1, 0, 0]
-        : willTransform.match(/^matrix\(([^\)]*)\)$/)[1].split(', ').map(s => +s);
-    el.classList.remove(cls)
-
-    //and set the plain translation:
-    const [dx, dy] = trackMoves(el)
-    el.style.transform = `translate(${dx}px, ${dy}px)`
-    
-    //after the specified delay, apply the transition
-    setTimeout(_ => {
-        el.classList.add(cls)
-        //override the transition props
-        el.style.transform = `matrix(${sx}, ${wx}, ${wy}, ${sy}, ${tx + dx}, ${ty + dy})`
-        setTransition(props, el)
-        //after the delay, if last, remove:
-        if (props.last) setTimeout(_ => removeElement(el), props.time)
-    }, props.delay)
+const _move = transitionComponent(props => ({
+    onupdate: el => runMove(el, props)
+}))
+const _exit = transitionComponent(props => {
+    return {onremove: el => runExit(el, props, props.css || {})}
 })
 
-const _leaveOnCreate = txmethod('oncreate', (props, el) => {
-  autoTracking.track(el)
-  setTimeout(_ => trackMoves(el), props.ready)
+const enter = transitionComponent(props => {
+    return {oncreate: el => runEnter(el, props, props.css || {})}
 })
 
-const leave = props => combine(
-    _leaveOnCreate(props),
-    _leaveOnRemove(props)
-)
+const move = (props, children) => _move(props, _track(null, children))
 
-const enter = txmethod('oncreate', (props, el) => {
-    const clsEnter = `${props.name}-enter`
-    el.classList.add(clsEnter)
-    setTimeout(_ => {
-        setTransition(props, el)
-        el.classList.remove(clsEnter)
-    }, props.delay)
-})
+const exit = (props, children) => _exit(props, _track(null, children))
 
-const change = txmethod('oncreate', (props, el) => setTransition(props, el))
-
-const _moveOnUpdate = txmethod('onupdate', (props, el) => {
-    const [dx, dy] = trackMoves(el)
-    el.style.transition = ''
-    el.style.transform = `translate(${dx}px, ${dy}px)`
-    setTimeout(_ => {
-        setTransition(props, el)
-        el.style.transform = 'translate(0,0)'
-        setTimeout(_ => {
-            el.style.transform = ''
-            el.style.transition = ''
-        }, props.time)
-    })        
-})
-
-const _moveOnCreate = txmethod('oncreate', (props, el) => {
-  autoTracking.track(el)
-  setTimeout(_ => trackMoves(el), props.ready)
-})
-
-const move = props => combine(
-    _moveOnCreate(props),
-    _moveOnUpdate(props)
-)
-
-function combine(...args) {
-    var a, b
-    const ts = [...args]
-    const l = ts.length
-    var a = ts[0]
-    if (l === 1) return a
-    var b
-    if (l > 2) b = combine(...ts.slice(1))
-    else b = ts[1]
-    return v => a(b(v))
-}
-
-function group(f) {
-    return vnode => {
-        vnode.children.forEach(f)
-        return vnode
-    }
-}
-
-
-
-module.exports = {
-    change,
-    enter,
-    leave,
-    move,
-    group,
-    combine
-}
+modeul.exports = {enter, move, exit}
