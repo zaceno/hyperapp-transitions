@@ -7,11 +7,6 @@ On the web, the favored approach is to use the CSS-transition property. Some jav
 
 This library provides function to help you design your app with beautiful, meaningful transitions without cluttering your code. Specifically for apps based on [Hyperapp](https://hyperapp.js.org) and [Picodom](https://github.com/picodom/picodom).
 
-If you want to just dive straight in, have a look at these couple of live-editable examples on codepen:
-
-- [Toasts](https://codepen.io/zaceno/pen/awRxaN)
-- [15-puzzle](https://codepen.io/zaceno/pen/MoPLOj)
-- [Carousel](https://codepen.io/zaceno/pen/awPbJG)
 
 ## Set up
 
