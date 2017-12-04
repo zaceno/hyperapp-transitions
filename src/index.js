@@ -135,4 +135,4 @@ const move = (props, children) => _move(props, _track(null, children))
 
 const exit = (props, children) => _exit(props, _track(null, children))
 
-modeul.exports = {enter, move, exit}
+module.exports = {enter, move, exit}
