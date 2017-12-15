@@ -31,7 +31,7 @@ The imported object exposes `enter`, `exit` and `move` functions described below
 Include the following script tag in the `<head>...</head>` of your html page:
 
 ```html
-<script src="https://unpkg.com/hyperapp-transitions@latest/dist/hyperapp-transitions.umd.js"></script>
+<script src="https://unpkg.com/hyperapp-transitions"></script>
 ```
 
 This creates a `transitions` object in the global scope, through which you access the `enter`, `exit` and `move` functions described below.

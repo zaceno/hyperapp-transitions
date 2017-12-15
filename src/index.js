@@ -1,16 +1,17 @@
 
+    
+addEventListener('resize', updateAllTracked)
+addEventListener('scroll', updateAllTracked)
 
-addEventListener('resize', _ => updateAllTracked())
-addEventListener('scroll', _ => updateAllTracked())
-
-const trackingRegistry = []
+var trackingRegistry = []
 
 function removeElement (el) {
     el.parentNode.removeChild(el)
 }
 
 function setStyle (el, props) {
-    Object.keys(props).forEach(name => {
+    Object.keys(props)
+    .forEach(function (name) {
         el.style[name] = props[name]
     })
 }
@@ -22,7 +23,7 @@ function registerTracking (el) {
 }
 
 function unregisterTracking(el) {
-    const i = trackingRegistry.indexOf(el)
+    var i = trackingRegistry.indexOf(el)
     if (i === -1) return
     trackingRegistry.splice(i, 1)
 }
@@ -32,35 +33,37 @@ function updateAllTracked () {
 } 
 
 function invertLastMove (el) {
-    const ox = el._x
-    const oy = el._y
-    if (!ox) return `translate(0, 0)`
-    const {x, y} = updateTracking(el)   
-    return `translate(${Math.floor(ox-x)}px, ${Math.floor(oy-y)}px)`
+    var x = el._x
+    var y = el._y
+    if (!x) return 'translate(0, 0)'
+    var n = updateTracking(el)
+    var dx = Math.floor(x - n.x)
+    var dy = Math.floor(y - n.y)
+    return 'translate(' + dx + 'px, ' + dy + 'px)'
 }
 
 function updateTracking (el) {
-    const {top: y, left: x} = el.getBoundingClientRect()
-    el._x = x
-    el._y = y
-    return {x, y}
+    var rect = el.getBoundingClientRect()
+    el._x = rect.left
+    el._y = rect.top
+    return {x: rect.left, y: rect.top}
 }
 
 function runTransition (el, props, before, after, ondone) {
-    const easing = props.easing || 'linear'
-    const time = props.time || 300
-        setStyle(el, before)
-        //two nested rAF required for it to work in Chrome
-        requestAnimationFrame(_ => {
-            requestAnimationFrame(_ => {
-                setStyle(el, after)
-                el.style.transition = `all ${easing} ${time}ms`
-                setTimeout(_ => {
-                    el.style.transition = null
-                    ondone && ondone()
-                }, time)
-            })
+    var easing = props.easing || 'linear'
+    var time = props.time || 300
+    setStyle(el, before)
+    //two nested rAF required for it to work in Chrome
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            setStyle(el, after)
+            el.style.transition = 'all ' + easing + ' ' + time + 'ms'
+            setTimeout(function () {
+                el.style.transition = null
+                ondone && ondone()
+            }, time)
         })
+    })
 }
 
 function runEnter (el, props, css) {
@@ -68,11 +71,11 @@ function runEnter (el, props, css) {
     runTransition(
         el, props,
         css,
-        Object.keys(css).reduce((o, n) => {
+        Object.keys(css).reduce(function (o, n) {
             o[n] = null
             return o
         }, {}),
-        _ => updateTracking(el)
+        function () { updateTracking(el) }
     )
 }
 
@@ -87,17 +90,17 @@ function runMove (el, props) {
 function runExit (el, props, css) {
     if (typeof css === 'function') css = css()
     unregisterTracking(el)
-    const translation = invertLastMove(el)
-    css.transform = `${translation}${css.transform && (' ' + css.transform)}`
+    var translation = invertLastMove(el)
+    css.transform = translation + (css.transform ? (' ' + css.transform) : '')
     runTransition(
         el, props,
         {transform: translation},
         css,
-        _ => removeElement(el)
+        function () { removeElement(el) }
     )
 }
 
-function composeHandlers (f1, f2) {
+function composeHandlers (f1, f2) {
     return function (el) {
         f1 && f1(el)
         f2 && f2(el)
@@ -106,9 +109,11 @@ function composeHandlers (f1, f2) {
 
 function transitionComponent (handlersFn) {
     return function (props, children) {
-        const handlers = handlersFn(props || {})
-        return children.filter(child => !!child.props).map(child => {
-            ['oncreate', 'onupdate', 'onremove'].forEach(n => {
+        var handlers = handlersFn(props || {})
+        return children
+        .filter(function (child) { return !!child.props})
+        .map(function (child) {
+            ['oncreate', 'onupdate', 'onremove'].forEach(function (n) {
                 child.props[n] = composeHandlers(child.props[n], handlers[n])
             })  
             return child
@@ -116,23 +121,29 @@ function transitionComponent (handlersFn) {
     }
 }
 
-const _track = transitionComponent(props => ({
-    oncreate: el => registerTracking(el)
-}))
-
-const _move = transitionComponent(props => ({
-    onupdate: el => runMove(el, props)
-}))
-const _exit = transitionComponent(props => {
-    return {onremove: el => runExit(el, props, props.css || {})}
+var _track = transitionComponent(function (props) { 
+    return {oncreate: function (el) { registerTracking(el)} }
 })
 
-const enter = transitionComponent(props => {
-    return {oncreate: el => runEnter(el, props, props.css || {})}
+var _move = transitionComponent(function (props) { 
+    return { onupdate: function (el) { runMove(el, props) } }
 })
 
-const move = (props, children) => _move(props, _track(null, children))
+var _exit = transitionComponent(function (props) {
+    return { onremove: function (el) { runExit(el, props, props.css || {}) } }
+})
 
-const exit = (props, children) => _exit(props, _track(null, children))
+var enter = transitionComponent(function (props) {
+    return { oncreate: function (el) { runEnter(el, props, props.css || {}) } }
+})
 
-module.exports = {enter, move, exit}
+var move = function (props, children) {
+    return _move(props, _track(null, children))
+}
+
+var exit = function (props, children) {
+    return _exit(props, _track(null, children))
+}
+
+export {enter, move, exit}
+
