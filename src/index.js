@@ -149,3 +149,5 @@ var move = function (props, children) {
 var exit = function (props, children) {
     return _exit(props, _track(null, children))
 }
+
+export {enter, move, exit}
