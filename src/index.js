@@ -1,5 +1,4 @@
     
-    
 addEventListener('resize', updateAllTracked)
 addEventListener('scroll', updateAllTracked)
 
@@ -102,11 +101,14 @@ function runExit (el, props, css) {
     
 function noop () {}
     
-function composeHandlers (f1, f2) {
+function composeHandlers (f1, f2, n) {
+    if (!f1 && !f2) return undefined
+    if (f1 && !f2) f2 = noop
+    if (!f1 && f2) f1 = noop
     return function (el) {
-        f1 && f1(el)
-        f2 && f2(el)
-        return noop 
+        f1(el)
+        f2(el)
+        return noop
     }
 }
 
@@ -117,7 +119,7 @@ function transitionComponent (handlersFn) {
         .filter(function (child) { return !!child.props})
         .map(function (child) {
             ['oncreate', 'onupdate', 'onbeforeremove'].forEach(function (n) {
-                child.props[n] = composeHandlers(child.props[n], handlers[n])
+                child.props[n] = composeHandlers(child.props[n], handlers[n], n)
             })  
             return child
         })
@@ -147,6 +149,3 @@ var move = function (props, children) {
 var exit = function (props, children) {
     return _exit(props, _track(null, children))
 }
-
-
-export {enter, move, exit}
