@@ -20,9 +20,7 @@
   },
   "homepage": "https://github.com/zaceno/hyperapp-transitions#readme",
   "devDependencies": {
-    "uglify-js": "^3.2.2"
-  },
-  "dependencies": {
+    "uglify-js": "^3.2.2",
     "rollup": "^0.52.2"
   }
 }

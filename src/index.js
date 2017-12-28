@@ -1,4 +1,3 @@
-    
 addEventListener('resize', updateAllTracked)
 addEventListener('scroll', updateAllTracked)
 
@@ -86,7 +85,7 @@ function runMove (el, props) {
     )
 }
 
-function runExit (el, props, css) {
+function runExit (el, props, css, done) {
     if (typeof css === 'function') css = css()
     unregisterTracking(el)
     var translation = invertLastMove(el)
@@ -95,20 +94,16 @@ function runExit (el, props, css) {
         el, props,
         {transform: translation},
         css,
-        function () { removeElement(el) }
+        done
     )
 }
     
 function noop () {}
     
-function composeHandlers (f1, f2, n) {
-    if (!f1 && !f2) return undefined
-    if (f1 && !f2) f2 = noop
-    if (!f1 && f2) f1 = noop
-    return function (el) {
-        f1(el)
-        f2(el)
-        return noop
+function composeHandlers (f1, f2) {
+    return function (el, done) {
+        f1 && f1(el, done)
+        f2 && f2(el, done)
     }
 }
 
@@ -118,8 +113,8 @@ function transitionComponent (handlersFn) {
         return children
         .filter(function (child) { return !!child.props})
         .map(function (child) {
-            ['oncreate', 'onupdate', 'onbeforeremove'].forEach(function (n) {
-                child.props[n] = composeHandlers(child.props[n], handlers[n], n)
+            ['oncreate', 'onupdate', 'onremove'].forEach(function (n) {
+                child.props[n] = composeHandlers(child.props[n], handlers[n])
             })  
             return child
         })
@@ -135,7 +130,7 @@ var _move = transitionComponent(function (props) {
 })
 
 var _exit = transitionComponent(function (props) {
-    return { onbeforeremove: function (el) { runExit(el, props, props.css || {}) } }
+    return { onremove: function (el, done) { runExit(el, props, props.css || {}, done) } }
 })
 
 var enter = transitionComponent(function (props) {
