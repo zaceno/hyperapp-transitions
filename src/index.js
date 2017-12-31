@@ -104,6 +104,7 @@ function composeHandlers (f1, f2) {
     return function (el, done) {
         f1 && f1(el, done)
         f2 && f2(el, done)
+        return noop
     }
 }
 
@@ -130,7 +131,12 @@ var _move = transitionComponent(function (props) {
 })
 
 var _exit = transitionComponent(function (props) {
-    return { onremove: function (el, done) { runExit(el, props, props.css || {}, done) } }
+    return {
+        onremove: function (el, done) {
+            done = done || function () { removeElement(el) }
+            runExit(el, props, props.css || {}, done)
+        }
+    }
 })
 
 var enter = transitionComponent(function (props) {
