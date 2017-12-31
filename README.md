@@ -111,3 +111,9 @@ This example focuses on using move transitions, and demonstrates how it applies 
 
 This is an example of a situation where using deferred properties help, because the exit-transition can't know which direction to go, until it's too late (it's already not in the vdom anymore). But by using a function call for it's `css` prop, it can know the current direction to exit.
 
+### Using Picodom instead of Hyperapp:
+
+- [Toasts](https://codepen.io/zaceno/pen/PEmEbW)
+- [15-puzzle](https://codepen.io/zaceno/pen/YYVvEY)
+- [Carousel](https://codepen.io/zaceno/pen/goWKed)
+
