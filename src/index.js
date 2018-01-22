@@ -101,6 +101,8 @@ function runExit (el, props, css, done) {
 function noop () {}
     
 function composeHandlers (f1, f2) {
+    if (!f1) return f2
+    if (!f2) return f1
     return function (el, done) {
         f1 && f1(el, done)
         f2 && f2(el, done)
