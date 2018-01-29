@@ -53,6 +53,7 @@ Cause elements to appear, with animation. The props are:
 - `css` the css overrides the element should have *before* it begins to appear. This can also be a function, allowing you to defer the decision until right before the animation starts.
 - `time` the duration of the transition in milliseconds. Default: `300`.
 - `easing` A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
+- `delay` Wait this amount of milliseconds before starting the transition. Default: `0`.
 
 Example:
 
@@ -74,6 +75,8 @@ Cause elements to leave with animation. The props are:
 - `css` the css overrides the element should have *after* it has left. This can also be a function, allowing you to defer the decision until right before the animation starts.
 - `time` the duration of the transition in milliseconds. Default: `300`.
 - `easing` A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
+- `delay` Wait this amount of milliseconds before beginning the transition. Default: `0`.
+- `keep` When stacking multiple exit transitions, set this to `true` on all but the last one, in order to prevent previous ones from removing the element when complete. Default: `false`.
 
 Example:
 

@@ -50,9 +50,9 @@ function updateTracking (el) {
 function runTransition (el, props, before, after, ondone) {
     var easing = props.easing || 'linear'
     var time = props.time || 300
+    var delay = props.delay || 0
     setStyle(el, before)
-    //two nested rAF required for it to work in Chrome
-    requestAnimationFrame(function () {
+    setTimeout(function () {
         requestAnimationFrame(function () {
             setStyle(el, after)
             el.style.transition = 'all ' + easing + ' ' + time + 'ms'
@@ -61,7 +61,7 @@ function runTransition (el, props, before, after, ondone) {
                 ondone && ondone()
             }, time)
         })
-    })
+    }, delay)
 }
 
 function runEnter (el, props, css) {
@@ -135,8 +135,8 @@ var _move = transitionComponent(function (props) {
 var _exit = transitionComponent(function (props) {
     return {
         onremove: function (el, done) {
-            done = done || function () { removeElement(el) }
-            runExit(el, props, props.css || {}, done)
+            done = done || function () { removeElement(el) }
+            runExit(el, props, props.css || {}, !props.keep && done)
         }
     }
 })
@@ -153,4 +153,4 @@ var exit = function (props, children) {
     return _exit(props, _track(null, children))
 }
 
-export {enter, move, exit}
+export {enter, move, exit}    
