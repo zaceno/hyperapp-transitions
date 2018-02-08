@@ -1,3 +1,4 @@
+    
 addEventListener('resize', updateAllTracked)
 addEventListener('scroll', updateAllTracked)
 
@@ -7,10 +8,10 @@ function removeElement (el) {
     el.parentNode.removeChild(el)
 }
 
-function setStyle (el, props) {
-    Object.keys(props)
+function setStyle (el, attr) {
+    Object.keys(attr)
     .forEach(function (name) {
-        el.style[name] = props[name]
+        el.style[name] = attr[name]
     })
 }
 
@@ -47,10 +48,10 @@ function updateTracking (el) {
     return {x: rect.left, y: rect.top}
 }
 
-function runTransition (el, props, before, after, ondone) {
-    var easing = props.easing || 'linear'
-    var time = props.time || 300
-    var delay = props.delay || 0
+function runTransition (el, attr, before, after, ondone) {
+    var easing = attr.easing || 'linear'
+    var time = attr.time || 300
+    var delay = attr.delay || 0
     setStyle(el, before)
     setTimeout(function () {
         requestAnimationFrame(function () {
@@ -64,10 +65,10 @@ function runTransition (el, props, before, after, ondone) {
     }, delay)
 }
 
-function runEnter (el, props, css) {
+function runEnter (el, attr, css) {
     if (typeof css === 'function') css = css()
     runTransition(
-        el, props,
+        el, attr,
         css,
         Object.keys(css).reduce(function (o, n) {
             o[n] = null
@@ -77,21 +78,21 @@ function runEnter (el, props, css) {
     )
 }
 
-function runMove (el, props) {
+function runMove (el, attr) {
     runTransition(
-        el, props,
+        el, attr,
         {transform: invertLastMove(el)},
         {transform: null}
     )
 }
 
-function runExit (el, props, css, done) {
+function runExit (el, attr, css, done) {
     if (typeof css === 'function') css = css()
     unregisterTracking(el)
     var translation = invertLastMove(el)
     css.transform = translation + (css.transform ? (' ' + css.transform) : '')
     runTransition(
-        el, props,
+        el, attr,
         {transform: translation},
         css,
         done
@@ -111,46 +112,46 @@ function composeHandlers (f1, f2) {
 }
 
 function transitionComponent (handlersFn) {
-    return function (props, children) {
-        var handlers = handlersFn(props || {})
+    return function (attr, children) {
+        var handlers = handlersFn(attr || {})
         return children
-        .filter(function (child) { return !!child.props})
+        .filter(function (child) { return !!child.attributes})
         .map(function (child) {
             ['oncreate', 'onupdate', 'onremove'].forEach(function (n) {
-                child.props[n] = composeHandlers(child.props[n], handlers[n])
+                child.attributes[n] = composeHandlers(child.attributes[n], handlers[n])
             })  
             return child
         })
     }
 }
 
-var _track = transitionComponent(function (props) { 
+var _track = transitionComponent(function (attr) { 
     return {oncreate: function (el) { registerTracking(el)} }
 })
 
-var _move = transitionComponent(function (props) { 
-    return { onupdate: function (el) { runMove(el, props) } }
+var _move = transitionComponent(function (attr) { 
+    return { onupdate: function (el) { runMove(el, attr) } }
 })
 
-var _exit = transitionComponent(function (props) {
+var _exit = transitionComponent(function (attr) {
     return {
         onremove: function (el, done) {
             done = done || function () { removeElement(el) }
-            runExit(el, props, props.css || {}, !props.keep && done)
+            runExit(el, attr, attr.css || {}, !attr.keep && done)
         }
     }
 })
 
-var enter = transitionComponent(function (props) {
-    return { oncreate: function (el) { runEnter(el, props, props.css || {}) } }
+var enter = transitionComponent(function (attr) {
+    return { oncreate: function (el) { runEnter(el, attr, attr.css || {}) } }
 })
 
-var move = function (props, children) {
-    return _move(props, _track(null, children))
+var move = function (attr, children) {
+    return _move(attr, _track(null, children))
 }
 
-var exit = function (props, children) {
-    return _exit(props, _track(null, children))
+var exit = function (attr, children) {
+    return _exit(attr, _track(null, children))
 }
 
-export {enter, move, exit}    
+export {enter, move, exit}  
