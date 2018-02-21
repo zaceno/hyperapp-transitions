@@ -1,6 +1,6 @@
 {
   "name": "@hyperapp/transitions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transitions for Hyperapp/Picodom",
   "main": "dist/transitions.js",
   "module": "src/index.js",
