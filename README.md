@@ -164,7 +164,9 @@ Default: `300`.
 
 #### `easing`
 
-A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
+A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition.
+
+Default: `"linear"`.
 
 ### Example:
 
