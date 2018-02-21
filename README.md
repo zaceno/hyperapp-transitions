@@ -13,7 +13,7 @@ Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperap
 Simply wrap your component in one of the decorator components exported from Hyperapp Transitions:
 
 ```jsx
-import {Enter} from "hyperapp-transitions"
+import {Enter} from "transitions"
 
 const Notification = ({key, message}) => (
     <Enter css={{opacity: "0", transform: "translateX(100%)"}}>
@@ -31,19 +31,19 @@ Use it as you would any component. The difference is, now your newly added `Noti
 Install with npm or Yarn.
 
 <pre>
-npm i <a href=https://www.npmjs.com/package/hyperapp-transitions>hyperapp-transitions</a>
+npm i <a href=https://www.npmjs.com/package/@hyperapp/transitions>hyperapp-transitions</a>
 </pre>
 
 Then with a module bundler like [Rollup](https://rollupjs.org) or [Webpack](https://webpack.js.org), use as you would anything else.
 
 ```js
-import transitions from "hyperapp-transitions"
+import transitions from "@hyperapp/transitions"
 ```
 
-If you don't want to set up a build environment, you can download Hyperapp Transitions from a CDN like [unpkg.com](https://unpkg.com/hyperapp-transitions) and it will be globally available through the <samp>window.transitions</samp> object.
+If you don't want to set up a build environment, you can download Hyperapp Transitions from a CDN like [unpkg.com](https://unpkg.com/@hyperapp/transitions) and it will be globally available through the <samp>window.transitions</samp> object.
 
 ```html
-<script src="https://unpkg.com/hyperapp-transitions"></script>
+<script src="https://unpkg.com/@hyperapp/transitions"></script>
 ```
 
 ## Overview
