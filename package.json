@@ -1,12 +1,12 @@
 {
-  "name": "hyperapp-transitions",
+  "name": "@hyperapp/transitions",
   "version": "1.0.0",
   "description": "Transitions for Hyperapp/Picodom",
-  "main": "dist/hyperapp-transitions.js",
+  "main": "dist/transitions.js",
   "module": "src/index.js",
   "scripts": {
-    "umd": "rollup src/index.js -f umd -n transitions -m -o dist/hyperapp-transitions.js",
-    "minify": "uglifyjs dist/hyperapp-transitions.js -o dist/hyperapp-transitions.js -mc --source-map includeSources,url=hyperapp-transitions.js.map",
+    "umd": "rollup src/index.js -f umd -n transitions -m -o dist/transitions.js",
+    "minify": "uglifyjs dist/hyperapp-transitions.js -o dist/transitions.js -mc --source-map includeSources,url=transitions.js.map",
     "build": "npm run umd && npm run minify"
   },
   "repository": {
