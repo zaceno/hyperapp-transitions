@@ -1,6 +1,6 @@
 # <img height=24 src=https://cdn.rawgit.com/JorgeBucaran/f53d2c00bafcf36e84ffd862f0dc2950/raw/882f20c970ff7d61aa04d44b92fc3530fa758bc0/Hyperapp.svg> Hyperapp Transitions
 
-[![npm](https://img.shields.io/npm/v/hyperapp-transitions.svg)](https://www.npmjs.org/package/hyperapp-transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
+[![npm](https://img.shields.io/npm/v/@hyperapp/transitions.svg)](https://www.npmjs.org/package/@hyperapp/transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
 Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperapp/hyperapp) components as they are appear, dissapear and move around on the page. Use it to provide your user with important cues and a smoother experience.
 
@@ -31,7 +31,7 @@ Use it as you would any component. The difference is, now your newly added `Noti
 Install with npm or Yarn.
 
 <pre>
-npm i <a href=https://www.npmjs.com/package/@hyperapp/transitions>hyperapp-transitions</a>
+npm i <a href=https://www.npmjs.com/package/@hyperapp/transitions>@hyperapp/transitions</a>
 </pre>
 
 Then with a module bundler like [Rollup](https://rollupjs.org) or [Webpack](https://webpack.js.org), use as you would anything else.
@@ -218,7 +218,7 @@ Please have a look at these live, editable examples, for some ideas of what is p
 
 ## Bugs & Questions
 
-Do you have questions? Or think you've found a bug? Please file an issue att https://github.com/hyperappcommunity/hyperapp-transitions
+Do you have questions? Or think you've found a bug? Please file an issue att https://github.com/hyperappcommunity/transitions
 
 Or come join the us on the [Hyperapp Slack](https://hyperappjs.herokuapp.com)!
 
