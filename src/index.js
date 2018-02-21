@@ -142,16 +142,16 @@ var _exit = transitionComponent(function (attr) {
     }
 })
 
-var enter = transitionComponent(function (attr) {
+var Enter = transitionComponent(function (attr) {
     return { oncreate: function (el) { runEnter(el, attr, attr.css || {}) } }
 })
 
-var move = function (attr, children) {
+var Move = function (attr, children) {
     return _move(attr, _track(null, children))
 }
 
-var exit = function (attr, children) {
+var Exit = function (attr, children) {
     return _exit(attr, _track(null, children))
 }
 
-export {enter, move, exit}  
+export {Enter, Move, Exit}

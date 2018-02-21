@@ -1,122 +1,225 @@
-# Transition Helpers for Hyperapp / Picodom
+# <img height=24 src=https://cdn.rawgit.com/JorgeBucaran/f53d2c00bafcf36e84ffd862f0dc2950/raw/882f20c970ff7d61aa04d44b92fc3530fa758bc0/Hyperapp.svg> Hyperapp Transitions
 
+[![npm](https://img.shields.io/npm/v/hyperapp-transitions.svg)](https://www.npmjs.org/package/hyperapp-transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
-Transitions, or more specifically transition-*animations* are animations that smooth out the appearance of your app as elements are added, changed and removed. Well designed transitions provide important cues to the user, and are essential for a good experience.
+Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperapp/hyperapp) components as they are appear, dissapear and move around on the page. Use it to provide your user with important cues and a smoother experience.
 
-On the web, the favored approach is to use the CSS-transition property. Some javascript is often also needed, in order to apply the css properties with appropriate timing to achieve the desired effect.
+* **CSS Based** — Anything you can `transition` with CSS can be animated, including background-color, opacity, position and scale.
+* **Animate Layouts** — Reorder nodes in a list or flexbox-layout, and watch them gracefully *slide* into place 
+* **Composable** — Stack multiple transitions with different delay and duration for complex animation effects.
 
-This library provides function to help you design your app with beautiful, meaningful transitions without cluttering your code. Specifically for apps based on [Hyperapp](https://hyperapp.js.org) and [Picodom](https://github.com/picodom/picodom).
+## Getting Started
 
+Simply wrap your component in one of the decorator components exported from Hyperapp Transitions:
 
-## Set up
+```jsx
+import {Enter} from "hyperapp-transitions"
 
-### NPM
-
-Install the package in your project
-
+const Notification = ({key, message}) => (
+    <Enter css={{opacity: "0", transform: "translateX(100%)"}}>
+        <div key={key} class="notification">
+            {message}
+        </div>
+    </Enter>
+)
 ```
-> npm install hyperapp-transitions
-```
 
-... then include it in your app, using `require` (or `import`, if using es6 modules).
+Use it as you would any component. The difference is, now your newly added `Notifications` will not just suddenly appear, but rather fade and slide in from the right.
+
+## Installation
+
+Install with npm or Yarn.
+
+<pre>
+npm i <a href=https://www.npmjs.com/package/hyperapp-transitions>hyperapp-transitions</a>
+</pre>
+
+Then with a module bundler like [Rollup](https://rollupjs.org) or [Webpack](https://webpack.js.org), use as you would anything else.
 
 ```js
-const transitions = require('hyperapp-transitions')
+import transitions from "hyperapp-transitions"
 ```
 
-The imported object exposes `enter`, `exit` and `move` functions described below.
-
-### HTML
-
-Include the following script tag in the `<head>...</head>` of your html page:
+If you don't want to set up a build environment, you can download Hyperapp Transitions from a CDN like [unpkg.com](https://unpkg.com/hyperapp-transitions) and it will be globally available through the <samp>window.transitions</samp> object.
 
 ```html
 <script src="https://unpkg.com/hyperapp-transitions"></script>
 ```
 
-This creates a `transitions` object in the global scope, through which you access the `enter`, `exit` and `move` functions described below.
+## Overview
 
+Hyperapp Transitions exports three components: `Enter`, `Exit` and `Move` described below. Each take a number of attributes for defining the animation.
 
+The components are *decorator-components* (a.k.a "higher-order components"), which means that they do not add anything to the virtual DOM tree, but rather modify and return their children. 
 
-## Using transitions
+## Enter
 
-The `enter`, `move` and `exit` transitions are vnode decorators. They attach to the `oncreate`, `onupdate` and `onremove` lifecycle events of your nodes, in order to make the nodes transition. They *compose* with any existing lifecycle event-handlers, leaving them working the same as before.
+Use the Enter component to make elements appear in an animated fashion, when they are added to the DOM.
 
-The signature of these functions is the familiar JSX compatible `(props, children)`, so you can use them with jsx, and even compose them.
+### Attributes
 
-The transitions will apply to all the children (not recursively though).
+The Enter component takes the following attributes:
 
-### `enter`
+#### `css`
 
-Cause elements to appear, with animation. The props are:
+The css overrides the element should have *before* it begins to appear. This can also be a function, allowing you to defer the decision until right before the animation starts.
 
-- `css` the css overrides the element should have *before* it begins to appear. This can also be a function, allowing you to defer the decision until right before the animation starts.
-- `time` the duration of the transition in milliseconds. Default: `300`.
-- `easing` A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
-- `delay` Wait this amount of milliseconds before starting the transition. Default: `0`.
+Default: `{}`
 
-Example:
+#### `time`
+
+The duration of the transition in milliseconds.
+
+Default: `300`.
+
+#### `easing`
+
+A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition.
+
+Default: `"linear"`.
+
+#### `delay`
+
+Wait this amount of milliseconds before starting the transition.
+
+Default: `0`.
+
+### Example:
 
 ```jsx
 //make messages pop and fade in:
-<transitions.enter time={200} easing="ease-in-out" css={{
-    opacity: '0',
-    transform: 'scale(0.1, 0.1)',
+<Enter time={200} easing="ease-in-out" css={{
+    opacity: "0",
+    transform: "scale(0.1, 0.1)",
 }}>
     <p class="message">some message</p>
-</transitions.enter>
+</Enter>
 ```
 
+## Exit
 
-### `exit`
+Use the Exit component to animate out elements before they are removed from the DOM.
 
-Cause elements to leave with animation. The props are:
+### Attributes: 
 
-- `css` the css overrides the element should have *after* it has left. This can also be a function, allowing you to defer the decision until right before the animation starts.
-- `time` the duration of the transition in milliseconds. Default: `300`.
-- `easing` A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
-- `delay` Wait this amount of milliseconds before beginning the transition. Default: `0`.
-- `keep` When stacking multiple exit transitions, set this to `true` on all but the last one, in order to prevent previous ones from removing the element when complete. Default: `false`.
+The Exit component takes the following attributes:
 
-Example:
+#### `css`
+
+The css overrides the element should have *after* it has left. This can also be a function, allowing you to defer the decision until right before the animation starts.
+
+Default: `{}`
+
+#### `time`
+
+The duration of the transition in milliseconds.
+
+Default: `300`.
+
+#### `easing`
+
+A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition.
+
+Default: `"linear"`
+
+#### `delay`
+
+Wait this amount of milliseconds before beginning the transition.
+
+Default: `0`.
+
+#### `keep`
+
+When composing multiple Exit-transition components, set this to `true` on all but the last one, in order to prevent previous ones from removing the element when complete.
+
+Default: `false`.
+
+### Example:
 
 ```jsx
 //make messages slide and fade out, and change backgroundcolor
-<transitions.exit time={200} easing="ease-in-out" css={{
-    transform: 'translateY(-100%)',
-    background-color: '#999',
+<Exit time={200} easing="ease-in-out" css={{
+    transform: "translateY(-100%)",
+    opacity: "0",
 }}>
     <p class="message">some message</p>
-</transitions.exit>
+</Exit>
 ```
 
-### `move`
+## Move
 
-Whenever an element changes position on the page, you can make it slide to the new position, with desired timing.
+When the order of sibling nodes (items in a list, for example) changes, their elements are laid out in new positions on the page. When the sibling nodes are wrapped with the `Move` transition-component, they will glide smoothly to their new positions.
 
-Valid props are:
+Remember to key the nodes you wish to apply the `Move` transition to, so that the vdom engine is able to detct that it is the *order* that has changed, and not just all the attributes.
 
-- `time` the duration of the transition in milliseconds. Default: `300`.
-- `easing` A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
+### Attributes:
+
+The `Move` component takes the following attributes:
+
+#### `time`
+
+The duration of the transition in milliseconds.
+
+Default: `300`.
+
+#### `easing`
+
+A string with the [timing function](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) of the transition. Default: `"linear"`.
+
+### Example:
+
+```jsx
+
+<ul class="todo-list">
+    <Move time={200} easing="ease-in-out">
+    {state.todos.map(todo => (
+        <li class="todo-item" key={todo.id}>
+            ...
+        </li>
+    ))}
+    </Move>
+</ul>
+```
+
+## Composing Transitions
+
+The transition components work by adding handlers for the `oncreate`, `onremove` and/or `onupdate` lifecycle events to their children. If a child already has a handler for those lifecycle events, it is not overwritten. Rather, we compose the transition-handlers with existing lifecycle event handlers.
+
+This makes it possible to compose multiple transition components on top of eachother.
+
+### Example:
+
+```jsx
+const FadeInPopOut = (props, children) => (
+    <Enter css={{opacity: "0"}}>
+        <Exit css={{opacity: "0", transform: "scale(2.0,2.0)"}}>
+            {children}
+        </Exit>
+    </Enter>
+)
+```
+
+## Keys
+
+As a general rule: make sure to have keys on all nodes you apply transitions to.
+
+The lifecycle events which trigger the transitions, are based on *elements* - not virtual nodes. Without keys, Hyperapp's virtual DOM engine will often associate the a nodes with an unintended element in the real DOM, with unexpected transition-behavior as a consequence.
 
 
 ## Examples
 
-[Toasts](https://codepen.io/zaceno/pen/QOYOZd)
+Please have a look at these live, editable examples, for some ideas of what is possible:
 
-This example demonstrates composing together move, enter and exit transitions.
+- **[Toasts](https://codepen.io/zaceno/pen/QOYOZd)** - Combining Enter, Exit and Move transitions for an elegant notification display.
+- **[15-puzzle](https://codepen.io/zaceno/pen/XzOwPd)** - Slide squares around a grid using the Move transition
+- **[Carousel](https://codepen.io/zaceno/pen/ZawNmb)** - A situation you'll need deferred css for the Exit transition.
 
-[15-puzzle](https://codepen.io/zaceno/pen/XzOwPd)
+## Bugs & Questions
 
-This example focuses on using move transitions, and demonstrates how it applies to all the children it encloses
+Do you have questions? Or think you've found a bug? Please file an issue att https://github.com/hyperappcommunity/hyperapp-transitions
 
-[Carousel](https://codepen.io/zaceno/pen/ZawNmb)
+Or come join the us on the [Hyperapp Slack](https://hyperappjs.herokuapp.com)!
 
-This is an example of a situation where using deferred properties help, because the exit-transition can't know which direction to go, until it's too late (it's already not in the vdom anymore). But by using a function call for it's `css` prop, it can know the current direction to exit.
+## License
 
-### Using Picodom instead of Hyperapp:
-
-- [Toasts](https://codepen.io/zaceno/pen/PEmEbW)
-- [15-puzzle](https://codepen.io/zaceno/pen/YYVvEY)
-- [Carousel](https://codepen.io/zaceno/pen/goWKed)
-
+Hyperapp Transitions is MIT licensed. See [LICENSE](LICENSE.md).
