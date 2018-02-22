@@ -37,7 +37,7 @@ npm i <a href=https://www.npmjs.com/package/@hyperapp/transitions>@hyperapp/tran
 Then with a module bundler like [Rollup](https://rollupjs.org) or [Webpack](https://webpack.js.org), use as you would anything else.
 
 ```js
-import transitions from "@hyperapp/transitions"
+import {Enter, Exit, Move} from "@hyperapp/transitions"
 ```
 
 If you don't want to set up a build environment, you can download Hyperapp Transitions from a CDN like [unpkg.com](https://unpkg.com/@hyperapp/transitions) and it will be globally available through the <samp>window.transitions</samp> object.
