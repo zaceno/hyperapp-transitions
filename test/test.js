@@ -33,9 +33,9 @@ test.cb('Enter', t => {
                     t.falsy(el.querySelector('#target').style.transition)
                     t.falsy(el.querySelector('#target').style.prop)
                     t.end()
-                }, 50)    
-            }, 50)    
-        }, 100)    
+                }, 100)    
+            }, 100)    
+        }, 50)    
     }, 0)
 })
 
@@ -86,9 +86,9 @@ test.cb('Exit', t => {
                 setTimeout(_ => {
                     t.falsy(el.querySelector('#target'))
                     t.end()
-                }, 100)
-            }, 50)
-        }, 100)
+                }, 150)
+            }, 100)
+        }, 50)
     }, 0)
 })
 
