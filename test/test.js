@@ -117,7 +117,7 @@ test.cb('Exit - deferred css', t => {
         setTimeout(_ => {
             t.is(el.querySelector('#target').style.prop, 'foo')
             t.end()
-        }, 150)
+        }, 200)
     }, 0)
 })
 
