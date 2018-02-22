@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "9"
+
+env:
+  - NODE_ENV=development
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+notifications:
+  email: false
