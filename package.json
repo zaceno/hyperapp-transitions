@@ -1,26 +1,31 @@
 {
   "name": "@hyperapp/transitions",
   "version": "1.0.1",
-  "description": "Transitions for Hyperapp/Picodom",
+  "description": "Transitions for Hyperapp",
   "main": "dist/transitions.js",
   "module": "src/index.js",
   "scripts": {
     "umd": "rollup src/index.js -f umd -n transitions -m -o dist/transitions.js",
-    "minify": "uglifyjs dist/hyperapp-transitions.js -o dist/transitions.js -mc --source-map includeSources,url=transitions.js.map",
-    "build": "npm run umd && npm run minify"
+    "minify": "uglifyjs dist/transitions.js -o dist/transitions.js -mc --source-map includeSources,url=transitions.js.map",
+    "build": "npm run umd && npm run minify",
+    "test": "npm run build && ava test/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HyperappCommunity/hyperapp-transitions.git"
+    "url": "git+https://github.com/HyperappCommunity/transitions.git"
   },
   "author": "Zacharias Enochsson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/HyperappCommunity/hyperapp-transitions/issues"
+    "url": "https://github.com/HyperappCommunity/transitions/issues"
   },
-  "homepage": "https://github.com/HyperappCommunity/hyperapp-transitions#readme",
+  "homepage": "https://github.com/HyperappCommunity/transitions#readme",
   "devDependencies": {
-    "uglify-js": "^3.2.2",
-    "rollup": "^0.52.2"
-  }
+    "ava": "^1.0.0-beta.3",
+    "hyperapp": "^1.1.2",
+    "jsdom": "^11.6.2",
+    "rollup": "^0.52.2",
+    "uglify-js": "^3.2.2"
+  },
+  "dependencies": {}
 }
