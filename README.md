@@ -1,6 +1,6 @@
 # <img height=24 src=https://cdn.rawgit.com/JorgeBucaran/f53d2c00bafcf36e84ffd862f0dc2950/raw/882f20c970ff7d61aa04d44b92fc3530fa758bc0/Hyperapp.svg> Hyperapp Transitions
 
-[![Travis CI](https://api.travis-ci.org/HyperappCommunity/transitions.svg?branch=master)](https://travis-ci.org/HyperappCommunity/transitions) [![npm](https://img.shields.io/npm/v/@hyperapp/transitions.svg)](https://www.npmjs.org/package/@hyperapp/transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
+[![Travis CI](https://api.travis-ci.org/hyperapp/transitions.svg?branch=master)](https://travis-ci.org/hyperapp/transitions) [![npm](https://img.shields.io/npm/v/@hyperapp/transitions.svg)](https://www.npmjs.org/package/@hyperapp/transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
 
 Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperapp/hyperapp) components as they are appear, dissapear and move around on the page. Use it to provide your user with important cues and a smoother experience.
 
