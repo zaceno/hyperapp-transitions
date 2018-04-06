@@ -1,4 +1,3 @@
-    
 addEventListener('resize', updateAllTracked)
 addEventListener('scroll', updateAllTracked)
 
@@ -17,8 +16,10 @@ function setStyle (el, attr) {
 
 function registerTracking (el) {
     if (trackingRegistry.indexOf(el) > -1 ) return
-    updateTracking(el)
     trackingRegistry.push(el)
+    setTimeout(function () {
+      updateTracking(el)
+    }, 0)
 }
 
 function unregisterTracking(el) {
@@ -154,4 +155,4 @@ var Exit = function (attr, children) {
     return _exit(attr, _track(null, children))
 }
 
-export {Enter, Move, Exit}
+export {Enter, Move, Exit}  
