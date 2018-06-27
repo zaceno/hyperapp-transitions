@@ -8,8 +8,6 @@ Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperap
 * **Animate Layouts** — Reorder nodes in a list or flexbox-layout, and watch them gracefully *slide* into place 
 * **Composable** — Stack multiple transitions with different delay and duration for complex animation effects.
 
-Hyperapp Transitions is also compatible with the [Ultradom](https://github.com/jorgebucaran/ultradom) virtual-dom library. 
-
 ## Getting Started
 
 Simply wrap your component in one of the decorator components exported from Hyperapp Transitions:
@@ -218,18 +216,9 @@ Please have a look at these live, editable examples, for some ideas of what is p
 - **[15-puzzle](https://codepen.io/zaceno/pen/XzOwPd)** - Slide squares around a grid using the Move transition
 - **[Carousel](https://codepen.io/zaceno/pen/ZawNmb)** - A situation you'll need deferred css for the Exit transition.
 
-### Ultradom examples
-
-Same examples, using Ultradom:
-
-- [Toasts](https://codepen.io/zaceno/pen/PEmEbW)
-- [15-puzzle](https://codepen.io/zaceno/pen/YYVvEY)
-- [Carousel](https://codepen.io/zaceno/pen/goWKed)
-
-
 ## Bugs & Questions
 
-Do you have questions? Or think you've found a bug? Please file an issue att https://github.com/hyperappcommunity/transitions
+Do you have questions? Or think you've found a bug? Please file an issue att https://github.com/hyperapp/transitions
 
 Or come join the us on the [Hyperapp Slack](https://hyperappjs.herokuapp.com)!
 
