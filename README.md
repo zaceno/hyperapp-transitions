@@ -13,7 +13,7 @@ Hyperapp Transitions lets you animate your [Hyperapp](https://github.com/hyperap
 Simply wrap your component in one of the decorator components exported from Hyperapp Transitions:
 
 ```jsx
-import {Enter} from "transitions"
+import {Enter} from "@hyperapp/transitions"
 
 const Notification = ({key, message}) => (
     <Enter css={{opacity: "0", transform: "translateX(100%)"}}>
