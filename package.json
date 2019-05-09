@@ -1,5 +1,5 @@
 {
-  "name": "@hyperapp/transitions",
+  "name": "hyperapp-transitions",
   "version": "1.0.2",
   "description": "Transitions for Hyperapp",
   "main": "dist/transitions.js",
