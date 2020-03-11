@@ -1,3 +1,5 @@
+This project is only compatible with hyperapp v1, and I do not intend to maintain it any longer. Hence, I am archiving it.
+
 # <img height=24 src=https://cdn.rawgit.com/JorgeBucaran/f53d2c00bafcf36e84ffd862f0dc2950/raw/882f20c970ff7d61aa04d44b92fc3530fa758bc0/Hyperapp.svg> Hyperapp Transitions
 
 [![Travis CI](https://api.travis-ci.org/hyperapp/transitions.svg?branch=master)](https://travis-ci.org/hyperapp/transitions) [![npm](https://img.shields.io/npm/v/@hyperapp/transitions.svg)](https://www.npmjs.org/package/@hyperapp/transitions) [![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
