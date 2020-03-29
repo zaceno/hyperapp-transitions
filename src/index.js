@@ -50,7 +50,7 @@ function updateTracking (el) {
 }
 
 function runTransition (el, attr, before, after, ondone) {
-    var easing = attr.easing || 'linear'
+    var easing = attr.easing || 'ease-in-out'
     var time = attr.time || 300
     var delay = attr.delay || 0
     setStyle(el, before)
